@@ -95,10 +95,8 @@ const timerClass = {
         };
             
             const time = convertMs(deltaTime);
-            // console.log(time); 
-           
-            // const { days, hours, minutes, seconds } = time;
             const timerUpdate = addLeadingZero(time);
+            
             updateClockFace(timerUpdate);
             
         
@@ -115,16 +113,11 @@ const timerClass = {
 
 } 
 
-function addLeadingZero({ days, hours, minutes, seconds }) {
-    const updateDays = String(days).padStart(2, '0');
-    const updateHours = String(hours).padStart(2, '0');
-    const updateMinutes = String(minutes).padStart(2, '0');
-    const updateSeconds = String(seconds).padStart(2, '0');
-
-    return {
-        updateDays, updateHours,updateMinutes,updateSeconds
-    };    
-     
+function addLeadingZero(items) {
+    for (const key in items) {
+       items[key] = String(items[key]).padStart(2, '0')
+   }
+    return items;
 }
 
 
