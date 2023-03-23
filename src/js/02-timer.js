@@ -66,13 +66,13 @@ function convertMs(ms) {
     const day = hour * 24;
 
     // Remaining days
-  const days = padDay(Math.floor(ms / day));
+  const days = Math.floor(ms / day);
   // Remaining hours
-  const hours = pad(Math.floor((ms % day) / hour));
+  const hours = Math.floor((ms % day) / hour);
   // Remaining minutes
-  const minutes = pad(Math.floor(((ms % day) % hour) / minute));
+  const minutes = Math.floor(((ms % day) % hour) / minute);
   // Remaining seconds
-  const seconds = pad(Math.floor((((ms % day) % hour) % minute) / second));
+  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
 
   return { days, hours, minutes, seconds };
 }
@@ -95,7 +95,13 @@ const timerClass = {
         };
             
             const time = convertMs(deltaTime);
-            updateClockFace(time);
+            // console.log(time); 
+           
+            // const { days, hours, minutes, seconds } = time;
+            const timerUpdate = addLeadingZero(time);
+            updateClockFace(timerUpdate);
+            
+        
          
         }, 1000)
 
@@ -109,12 +115,17 @@ const timerClass = {
 
 } 
 
-function pad(value) {
-    return String(value).padStart(2, '0');
+function addLeadingZero({ days, hours, minutes, seconds }) {
+    const updateDays = String(days).padStart(2, '0');
+    const updateHours = String(hours).padStart(2, '0');
+    const updateMinutes = String(minutes).padStart(2, '0');
+    const updateSeconds = String(seconds).padStart(2, '0');
+
+    return {
+        updateDays, updateHours,updateMinutes,updateSeconds
+    };    
+     
 }
 
-function padDay(value) {
-    return String(value).padStart(3, '0');
-}
 
 
