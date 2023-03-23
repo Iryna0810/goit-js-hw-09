@@ -109,10 +109,6 @@ const timerClass = {
 
 } 
 
-// startBtn.addEventListener('click', () => {
-//     timerClass.start();
-// });
-
 function pad(value) {
     return String(value).padStart(2, '0');
 }
