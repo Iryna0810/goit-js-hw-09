@@ -3,89 +3,60 @@ import "flatpickr/dist/flatpickr.min.css";
 import Notiflix from 'notiflix';
 
 const timer = document.querySelector('.timer');
-const timerFild = document.querySelector('.field');
+timer.style.display = 'flex';
+timer.style.justifyContent = 'space-around';
+timer.style.color = 'tomato';
+timer.style.margin = '10px';
+timer.style.width = '500px';
+timer.style.fontSize = 'xx-large';
 
-        let dateNow = Date.now();
-        console.log(dateNow);
+let currentTime = null;
+let dateFinish = null;
 
+const startBtn = document.querySelector('button[data-start]');
+const clockDay = document.querySelector('span[data-days]');
+const clockHours = document.querySelector('span[data-hours]');
+const clockMinutes = document.querySelector('span[data-minutes]');
+const clockSeconds = document.querySelector('span[data-seconds]');
+
+startBtn.disabled = true;
+startBtn.addEventListener('click', () => {
+    timerClass.start();
+});
 
 const options = {
     enableTime: true,
     time_24hr: true,
     defaultDate: new Date(),
     minuteIncrement: 1,
+    
     onClose(selectedDates) {
-        console.log(selectedDates[0]);
-        // let dateNow = Date.now();
-        // console.log(dateNow);
-        console.log(Date.now(selectedDates[0]));
         
-    //     const currentTime = Date.now();
-    //     console.log(currentTime);
-      const deltaTime = dateFinish - dateNow;
-        const data = convertMs(deltaTime);
-    //     console.log(data);
-      updateClockFace(data);   
+        dateFinish = selectedDates[0];
+        currentTime = new Date();
+
+        clearInterval(timerClass.intervalId);
+
+        if (dateFinish < currentTime) {
+        return Notiflix.Notify.failure("Please choose a date in the future",  {
+        width: '360px',
+        svgSize: '200px',
+  },);
+        }
+
+        else startBtn.disabled = false;     
+      
     }
 };
 
 const calendars = flatpickr("#datetime-picker", options);
-console.log(calendars.selectedDates[0]);
-// const dateFinish = Date.now(calendars.selectedDates[0]);
-
-const dateFinish = Date.now(calendars.selectedDates[0]) - Date.now();
-console.log(dateFinish);
-console.log(convertMs(dateFinish));
-
-
-// console.log(timerFild[data-minutes]);
-
-timer.style.display = 'flex';
-timer.style.justifyContent = 'space-around';
-timer.style.color = 'tomato';
-timer.style.margin = '10px';
-timer.style.width = '450px';
-
-// const currentTime = Date.now();
-// console.log(currentTime);
-
-
-function pad(value) {
-    return String(value).padStart(2, '0');
-}
-
-
-
-
-refs = {
-    startBtn: document.querySelector('button[data-start]'),
-    clockDay: document.querySelector('span[data-days]'),
-    clockHours: document.querySelector('span[data-hours]'),
-    clockMinutes: document.querySelector('span[data-minutes]'),
-    clockSeconds: document.querySelector('span[data-seconds]'),
-
-}
 
 function updateClockFace({ days, hours, minutes, seconds }) {
-    refs.clockDay.textContent = `${days}`;
-    refs.clockHours.textContent = `${hours}`;
-    refs.clockMinutes.textContent = `${minutes}`;
-    refs.clockSeconds.textContent = `${seconds}`;
-
+    clockDay.textContent = `${days}`;
+    clockHours.textContent = `${hours}`;
+    clockMinutes.textContent = `${minutes}`;
+    clockSeconds.textContent = `${seconds}`;
 }
-
-
-
-// console.log(refs.clockDay);
-// const dateStart = Date.now();
-// console.log(dateStart);
-
-// console.log(dateFinish - dateStart);
-
-// let ms = dateFinish - dateStart;
-
-// console.log(convertMs(ms));
-
 
 function convertMs(ms) {
     // Number of milliseconds per unit of time
@@ -95,7 +66,7 @@ function convertMs(ms) {
     const day = hour * 24;
 
     // Remaining days
-    const days = pad(Math.floor(ms / day));
+  const days = padDay(Math.floor(ms / day));
   // Remaining hours
   const hours = pad(Math.floor((ms % day) / hour));
   // Remaining minutes
@@ -110,29 +81,44 @@ const timerClass = {
     intervalId: null,
 
     start() {
-        let currentTime = null;
+        startBtn.disabled = true;   
 
         this.intervalId = setInterval(() => {
-            currentTime = Date.now();
+            
+            currentTime = new Date();
+            
             const deltaTime = dateFinish - currentTime;
-            const timeComponents = convertMs(deltaTime);
-            console.log(timeComponents);
-
-            const { days, hours, minutes, seconds } = timeComponents;
-            console.log(`${days}:${hours}:${minutes}:${seconds}`);
-
-            updateClockFace(timeComponents);
-
-
-
+            
+            if (deltaTime <= 0) {
+                this.stop();
+                return;
+        };
+            
+            const time = convertMs(deltaTime);
+            updateClockFace(time);
+         
         }, 1000)
+
+
     },
-    
+
+    stop() {
+        clearInterval(this.intervalId);
+        startBtn.disabled = false;
+        }    
 
 } 
 
-refs.startBtn.addEventListener('click', () => {
-    timerClass.start();
-});
+// startBtn.addEventListener('click', () => {
+//     timerClass.start();
+// });
+
+function pad(value) {
+    return String(value).padStart(2, '0');
+}
+
+function padDay(value) {
+    return String(value).padStart(3, '0');
+}
 
 
