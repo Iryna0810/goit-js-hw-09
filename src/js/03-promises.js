@@ -45,7 +45,7 @@ event.preventDefault();
   const amount = Number(refs.amountInput.value);
   const step = Number(refs.stepInput.value);
     let delayNext = 0;
-    for (i = 1; i <= amount; i += 1) {
+    for (let i = 1; i <= amount; i += 1) {
       delayNext += step;
       createPromise([i], delayNext);
       }
