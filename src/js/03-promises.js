@@ -39,10 +39,11 @@ function handleCreatePromise(event) {
 event.preventDefault();
 
   const delayFirst = Number(refs.delayInput.value);
-  const amount = Number(refs.amountInput.value);
   
   setTimeout(() => {
-    const step = Number(refs.stepInput.value);
+
+  const amount = Number(refs.amountInput.value);
+  const step = Number(refs.stepInput.value);
     let delayNext = 0;
     for (i = 1; i <= amount; i += 1) {
       delayNext += step;
