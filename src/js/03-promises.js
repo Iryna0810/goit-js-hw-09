@@ -46,7 +46,7 @@ event.preventDefault();
     let delayNext = 0;
     for (i = 1; i <= amount; i += 1) {
       delayNext += step;
-      createPromise(i, delayNext);
+      createPromise([i], delayNext);
       }
   }, delayFirst) 
 }
