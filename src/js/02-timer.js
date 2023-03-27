@@ -33,7 +33,7 @@ const options = {
     onClose(selectedDates) {
         
         dateFinish = selectedDates[0];
-        currentTime = new Date();
+        currentTime = Date.now();
 
         clearInterval(timerClass.intervalId);
 
@@ -85,7 +85,7 @@ const timerClass = {
 
         this.intervalId = setInterval(() => {
             
-            currentTime = new Date();
+            currentTime = Date.now();
             
             const deltaTime = dateFinish - currentTime;
             
